@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAN2LIVE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/splash.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+    <script>
+        // JavaScript to handle splash screen timing and redirection
+        window.onload = function() {
+            setTimeout(function() {
+                // Redirect to the landing page after 3 seconds
+                window.location.href = "{{ url_for('landing') }}";
+            }, 3000); // 3000 milliseconds = 3 seconds
+        };
+    </script>
+</head>
+<body>
+    <div class="splash-container">
+        <img src="{{ url_for('static', filename='images/Splash.png') }}" alt="PLAN2LIVE Logo" class="splash-image">
+        <h1>Welcome to PLAN2LIVE</h1>
+    </div>
+</body>
+</html>

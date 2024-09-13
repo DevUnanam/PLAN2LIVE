@@ -1,0 +1,277 @@
+/* Modals initially hidden */
+.modal {
+    display: none;
+}
+
+/* Dropdown menu initially hidden */
+.dropdown-menu {
+    display: none;
+}
+
+/* Enlist form initially hidden */
+.enlist-form {
+    display: none;
+}
+
+/* Other existing CSS styles */
+
+
+
+/* Navbar Styles */
+.navbar {
+    background-color: white; /* Set navbar background color to white */
+    border-radius: 50px; /* Cylindrical look */
+    padding: 0.75rem 2rem;
+}
+
+.nav-link {
+    color: transparent;
+    border: 2px solid #376b04;
+    border-radius: 5px;
+    padding: 5px 10px;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #376b04;
+    font-weight: bold;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.nav-link:hover {
+    color: #376b04;
+    background-color: #376b04;
+    -webkit-text-stroke-width: 0;
+}
+
+.navbar-brand img {
+    border-radius: 50%; /* Round the logo edges */
+    border: 2px solid white;
+}
+
+/* Sign In Button Styles */
+.btn-outline-primary {
+    color: #376b04;
+    border-color: #376b04;
+    border-radius: 50px; /* Ensure a more rounded, cylindrical shape */
+    padding: 0.5rem 1.5rem; /* Adjust padding for better shape */
+    transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+}
+
+.btn-outline-primary:hover {
+    color: white;
+    background-color: #376b04;
+    border-color: #376b04;
+}
+
+/* Google and Facebook Button Styles */
+.btn-google, .btn-facebook {
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-google {
+    background-color: #db4437; /* Google color */
+}
+
+.btn-facebook {
+    background-color: #3b5998; /* Facebook color */
+}
+
+.btn-google img, .btn-facebook img {
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* Specialties Section */
+#specialties .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#specialties .card-img-top {
+    height: auto; /* Automatically adjust the height to fit content */
+    max-height: 200px; /* Set a maximum height to prevent images from being too big */
+    width: 100%; /* Ensure the image takes up the full width of the card */
+    object-fit: cover; /* Make sure the entire image fits inside the container */
+}
+
+#specialties .card-body {
+    padding: 1.5rem;
+}
+
+#specialties .carousel-inner {
+    justify-content: space-between;
+    display: flex;
+    overflow: hidden;
+}
+
+.carousel-inner > .carousel-item {
+    display: flex; /* Ensure all items are displayed correctly */
+    align-items: center;
+    justify-content: center;
+}
+
+#specialties .carousel-item {
+    flex: 0 0 33.33%; /* Show 3 cards at a time */
+    max-width: 33.33%;
+    padding: 15px;
+    box-sizing: border-box;
+    transition: transform 0.5s ease;
+    
+}
+
+/* Hover Effects */
+.card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    transition: transform 0.3s ease;
+}
+
+/* Video Background */
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-section h1, .hero-section p {
+    color: white; /* Light green text */
+}
+
+.search-bar button {
+    background-color: #376b04; /* Light green button */
+    color: white;
+}
+
+.nav-item button {
+    background-color: #376b04;
+    color: white;
+}
+
+/* Carousel Controls */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+}
+
+
+.developer-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.developer-info .social-links img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+}
+
+.footer-logo img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    border-radius: 50%;
+}
+
+.footer-logo p {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.social-media a img {
+    width: 30px; /* Adjust size as needed */
+    height: auto;
+    margin-right: 10px;
+}
+
+.footer-column {
+    padding: 0 15px;
+}
+
+.footer-column h5 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.footer-column a {
+    display: block;
+    color: #000;
+    text-decoration: none;
+}
+
+.footer-column a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+    font-size: 0.875rem;
+}
+
+
+.specialties-marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+}
+
+.specialties-inner {
+    display: flex;
+    animation: marquee 15s linear infinite;
+}
+
+/* Ensure full-width footer */
+.container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.list-unstyled a {
+    color: #000;
+    text-decoration: none;
+}
+
+.list-unstyled a:hover {
+    text-decoration: underline;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+

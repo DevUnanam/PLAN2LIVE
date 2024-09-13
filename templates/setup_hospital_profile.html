@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Hospital Profile</title>
+</head>
+<body>
+    <h1>Setup Your Hospital Profile</h1>
+    <form id="hospital-profile-form">
+        <!-- Upload hospital pictures -->
+        <div class="mb-3">
+            <label for="hospital-pictures" class="form-label">Hospital Pictures</label>
+            <input type="file" class="form-control" id="hospital-pictures" multiple required>
+        </div>
+
+        <!-- Hospital description -->
+        <div class="mb-3">
+            <label for="hospital-description" class="form-label">Description</label>
+            <textarea class="form-control" id="hospital-description" rows="4" required></textarea>
+        </div>
+
+        <!-- Hospital features -->
+        <div class="mb-3">
+            <label for="hospital-features" class="form-label">Features</label>
+            <input type="text" class="form-control" id="hospital-features" required>
+        </div>
+
+        <!-- Medical specialties -->
+        <div class="mb-3">
+            <label for="hospital-specialties" class="form-label">Specialties</label>
+            <input type="text" class="form-control" id="hospital-specialties" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</body>
+</html>

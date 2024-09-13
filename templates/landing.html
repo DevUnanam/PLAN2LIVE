@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAN2LIVE - HOME PAGE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-white rounded-pill" style="position: absolute; top: 20px; width: 100%; z-index: 10;">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <!-- Left Section: Links on the left side -->
+            <ul class="navbar-nav mb-2 mb-lg-0 d-flex align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" style="color: #7CFC00;">FOR USERS</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #7CFC00;">
+                        ENLIST
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#enlistModal" data-hospital-type="public">PUBLIC HOSPITAL</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#enlistModal" data-hospital-type="private">PRIVATE HOSPITAL</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" style="color: #7CFC00;">HELP CENTER</a>
+                </li>
+            </ul>
+    
+            <!-- Logo in the Center -->
+            <a class="navbar-brand mx-auto" href="#">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="70">
+            </a>
+    
+            <!-- Right Section: Sign In Button -->
+            <button class="btn btn-outline-primary nav-item rounded-pill" type="button" data-bs-toggle="modal" data-bs-target="#authModal" style="background-color: white; color: #376b04;">
+                Sign In
+            </button>
+        </div>
+    </nav>
+    
+<!-- Hero Section -->
+<section class="hero-section" style="position: relative; height: 100vh;">
+    <!-- Video Background -->
+    <video autoplay muted loop id="heroVideo" class="video-background">
+        <source src="{{ url_for('static', filename='videos/hero-video.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Overlay -->
+    <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+
+    <!-- Hero Content -->
+    <div class="container text-center" style="position: relative; z-index: 2; color: #7CFC00;">
+        <h1 class="display-4">Find and Book Doctors Easily</h1>
+        <p class="lead">Search for specialties, hospitals, or healthcare providers near you</p>
+
+        <!-- Search Bar -->
+        <div class="search-bar mt-4 mb-4">
+            <form action="{{ url_for('search') }}" method="GET" class="d-flex justify-content-center">
+                <input type="text" name="query" class="form-control" placeholder="Search by specialty, hospital, or location" style="width: 50%;">
+                <button type="submit" class="btn btn-primary ms-2" style="background-color: white; font-weight: bold; color: #376b04;">Search</button>
+            </form>
+        </div>
+
+        <!-- Call to Actions -->
+        <div class="cta-buttons mt-4">
+            <a href="#" class="btn btn-outline-light me-2">Book a Doctor</a>
+            <a href="#" class="btn btn-outline-light me-2">Enlist Your Hospital</a>
+            <a href="#" class="btn btn-outline-light">Find Specialties</a>
+        </div>
+    </div>
+</section>
+
+    
+    
+
+    <!-- Sign In / Sign Up Modal -->
+   <!-- Sign In / Sign Up Modal -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="authCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <!-- Sign In Form -->
+                        <div class="carousel-item active">
+                            <h5 class="modal-title text-center mb-3" id="authModalLabel">Sign In</h5>
+                            <form action="{{ url_for('signin') }}" method="POST">
+                                {{ signin_form.hidden_tag() }}  <!-- CSRF token field -->
+                                <div class="mb-3">
+                                    <label for="signin-email" class="form-label">Email address</label>
+                                    {{ signin_form.email.label(class="form-label") }}
+                                    {{ signin_form.email(class="form-control", id="signin-email", placeholder="Enter your email") }}
+                                    {% if signin_form.email.errors %}
+                                        <div class="text-danger">
+                                            {% for error in signin_form.email.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signin-password" class="form-label">Password</label>
+                                    {{ signin_form.password.label(class="form-label") }}
+                                    {{ signin_form.password(class="form-control", id="signin-password", placeholder="Enter your password") }}
+                                    {% if signin_form.password.errors %}
+                                        <div class="text-danger">
+                                            {% for error in signin_form.password.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                                <p class="text-center mt-3">Forgot your password? <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Reset it here</a></p>
+                                <p class="text-center mt-3">Don't have an account? <a href="#" data-bs-target="#authCarousel" data-bs-slide="next">Sign Up</a></p>
+                                <div class="text-center mt-3">
+                                    <p>Or sign in with:</p>
+
+                                    <a href="{{ url_for('google.login') }}" class="btn btn-google">
+                                        <img src="{{ url_for('static', filename='images/google_logo.png') }}" alt="Google">
+                                        Sign In with Google
+                                    </a>
+                                    <a href="{{ url_for('facebook.login') }}" class="btn btn-facebook">
+                                        <img src="{{ url_for('static', filename='images/facebook_logo.png') }}" alt="Facebook">
+                                        Sign In with Facebook
+                                    </a>
+
+                        
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Sign Up Form -->
+                        <div class="carousel-item">
+                            <h5 class="modal-title text-center mb-3" id="authModalLabel">Sign Up</h5>
+                            <form action="{{ url_for('signup') }}" method="POST">
+                                {{ signup_form.hidden_tag() }}  <!-- CSRF token field -->
+                                <div class="mb-3">
+                                    <label for="signup-email" class="form-label">Email address</label>
+                                    {{ signup_form.email.label(class="form-label") }}
+                                    {{ signup_form.email(class="form-control", id="signup-email", placeholder="Enter your email") }}
+                                    {% if signup_form.email.errors %}
+                                        <div class="text-danger">
+                                            {% for error in signup_form.email.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signup-password" class="form-label">Password</label>
+                                    {{ signup_form.password.label(class="form-label") }}
+                                    {{ signup_form.password(class="form-control", id="signup-password", placeholder="Create a password") }}
+                                    {% if signup_form.password.errors %}
+                                        <div class="text-danger">
+                                            {% for error in signup_form.password.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signup-confirm-password" class="form-label">Confirm Password</label>
+                                    {{ signup_form.confirm_password.label(class="form-label") }}
+                                    {{ signup_form.confirm_password(class="form-control", id="signup-confirm-password", placeholder="Confirm your password") }}
+                                    {% if signup_form.confirm_password.errors %}
+                                        <div class="text-danger">
+                                            {% for error in signup_form.confirm_password.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                                <p class="text-center mt-3">Already have an account? <a href="#" data-bs-target="#authCarousel" data-bs-slide="prev">Sign In</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('forgot_password') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="reset-email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="reset-email" name="email" required placeholder="Enter your email">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Enlist Hospital Modal -->
+<div class="modal fade" id="enlistHospitalModal" tabindex="-1" aria-labelledby="enlistHospitalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="enlistHospitalModalLabel">Enlist Your Hospital</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="enlistForm" method="POST" action="/enlist">
+                    <div class="mb-3">
+                        <label for="hospital-name" class="form-label">Hospital Name</label>
+                        <input type="text" class="form-control" id="hospital-name" name="hospital_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hospital-email" class="form-label">Hospital Email</label>
+                        <input type="email" class="form-control" id="hospital-email" name="hospital_email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hospital-state" class="form-label">State</label>
+                        <select id="hospital-state" class="form-select" name="hospital_state" required>
+                            <!-- State options will be dynamically loaded -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hospital-local-government" class="form-label">Local Government</label>
+                        <select id="hospital-local-government" class="form-select" name="hospital_lga" required>
+                            <!-- LGAs will be dynamically loaded based on selected state -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hospital-address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="hospital-address" name="hospital_address" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">ENLIST NOW</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="specialties" class="container-fluid my-5">
+    <h2 class="text-center mb-4">Our Specialties</h2>
+    <!-- Marquee Container -->
+    <div class="specialties-marquee">
+        <div class="specialties-inner">
+            <!-- Card 1 -->
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/cardiology_icon.png') }}" class="card-img-top" alt="Cardiology">
+                <div class="card-body">
+                    <h5 class="card-title">Cardiology</h5>
+                    <a href="/specialties/cardiology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/dermatology_icon.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Dermatology</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/gastroenterology.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Gastroenterology</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/neurology.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Neurology</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/oncology.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Oncology</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/optometrist.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Optometry</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/orthopedics_icon.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Orthopedics</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/pediatrics_icon.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Pediatrics</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/pulmonology.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Pulmonology</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <img src="{{ url_for('static', filename='images/thyroid.png') }}" class="card-img-top" alt="Dermatology">
+                <div class="card-body">
+                    <h5 class="card-title">Thyroid</h5>
+                    <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+            <!-- Add more cards as needed -->
+        </div>
+    </div>
+</section>
+
+
+<section id="how-it-works" class="container py-5">
+    <div class="text-center">
+        <h2 class="mb-4">How It Works</h2>
+        <div class="row">
+            <!-- Card 1 -->
+            <div class="col-md-4">
+                <div class="card bg-dark text-white mb-4" style="background-image: url('{{ url_for('static', filename='images/search_background.jpg') }}'); background-size: cover; background-position: center; height: 300px;">
+                    <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+                        <i class="fas fa-search fa-3x mb-3"></i>
+                        <h4>Search for a Specialist</h4>
+                        <p>Use our powerful search tool to find the best doctors or specialists based on your needs.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="col-md-4">
+                <div class="card bg-dark text-white mb-4" style="background-image: url('{{ url_for('static', filename='images/booking_background.jpg') }}'); background-size: cover; background-position: center; height: 300px;">
+                    <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+                        <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                        <h4>Book an Appointment</h4>
+                        <p>Choose a suitable time slot and book your appointment easily through our platform.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="col-md-4">
+                <div class="card bg-dark text-white mb-4" style="background-image: url('{{ url_for('static', filename='images/visit_background.jpg') }}'); background-size: cover; background-position: center; height: 300px;">
+                    <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+                        <i class="fas fa-hospital fa-3x mb-3"></i>
+                        <h4>Visit the Hospital</h4>
+                        <p>Attend your scheduled appointment and receive top-quality care from our listed hospitals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Patient Testimonials Section -->
+<section id="testimonials" class="container mt-5">
+    <h2 class="text-center mb-4">Patient Testimonials</h2>
+    
+    <!-- Review Form (Visible to logged-in users only) -->
+    <div id="review-form" class="mb-5">
+        <h4>Leave a Review</h4>
+        <form action="{{ url_for('submit_review') }}" method="POST">
+            {{ review_form.hidden_tag() }}  <!-- CSRF token field -->
+            <div class="mb-3">
+                <label for="review-name" class="form-label">Name</label>
+                {{ review_form.name.label(class="form-label") }}
+                {{ review_form.name(class="form-control", id="review-name", placeholder="Your name") }}
+                {% if review_form.name.errors %}
+                    <div class="text-danger">
+                        {% for error in review_form.name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="review-content" class="form-label">Leave a Review</label>
+                {{ review_form.content.label(class="form-label") }}
+                {{ review_form.content(class="form-control", id="review-content", placeholder="Write your review here...", rows="5") }}
+                {% if review_form.content.errors %}
+                    <div class="text-danger">
+                        {% for error in review_form.content.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+    </div>
+
+    <!-- Display Submitted Reviews -->
+    <div id="review-list">
+        {% for review in reviews %}
+            <div class="review mb-4">
+                <img src="{{ review.profile_picture_url }}" alt="{{ review.name }}" class="rounded-circle" width="50" height="50">
+                <h5>{{ review.name }}</h5>
+                <p>{{ review.content }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<footer class="container-fluid bg-light py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Card 1: Footer Logo and Social Media -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="footer-logo text-center mb-3">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Plan2Live Logo"> <!-- FASFA logo -->
+                            <p>Plan2Live</p>
+                        </div>
+                        <div class="social-media text-center mb-3">
+                            <a href="#"><img src="{{ url_for('static', filename='images/facebook_logo.png') }}" alt="Facebook"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='images/instagram-logo.png') }}" alt="Instagram"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='images/x-logo.png') }}" alt="X"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='images/youtube-logo.png') }}" alt="YouTube"></a>
+                        </div>
+                        <p class="text-center">LAGOS, IKEJA, NIGERIA</p>
+                        <p class="text-center">"Connecting you to better healthcare."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Helpful Links -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Helpful Links</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Community Guidelines</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Developed By -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">DEVELOPED BY</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="developer-info">
+                                <img src="{{ url_for('static', filename='images/unanam-photo.jpeg') }}" alt="Unanam Victoria Joseph">
+                                <div>
+                                    <p>Unanam Victoria Joseph</p>
+                                    <div class="social-links">
+                                        <a href="#"><img src="{{ url_for('static', filename='images/github-logo.png') }}" alt="GitHub"></a>
+                                        <a href="#"><img src="{{ url_for('static', filename='images/linkedin-logo.png') }}" alt="LinkedIn"></a>
+                                        <a href="#"><img src="{{ url_for('static', filename='images/x-logo.png') }}" alt="X"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="developer-info">
+                                <img src="{{ url_for('static', filename='images/jamiu-photo.jpg') }}" alt="Jamiu Shomoye">
+                                <div>
+                                    <p>Jamiu Shomoye</p>
+                                    <div class="social-links">
+                                        <a href="#"><img src="{{ url_for('static', filename='images/github-logo.png') }}" alt="GitHub"></a>
+                                        <a href="#"><img src="{{ url_for('static', filename='images/linkedin-logo.png') }}" alt="LinkedIn"></a>
+                                        <a href="#"><img src="{{ url_for('static', filename='images/x-logo.png') }}" alt="X"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center mt-4">
+            <p>&copy; 2024 Plan2Live. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+<script>
+// Fetch states and local government areas from the backend
+fetch('/api/get-states-lga')
+    .then(response => response.json())
+    .then(data => {
+        const stateSelect = document.getElementById('hospital-state');
+        const localGovSelect = document.getElementById('hospital-local-government');
+        
+        // Populate states dropdown
+        for (let state in data) {
+            let option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            stateSelect.appendChild(option);
+        }
+
+        // Event listener for state selection
+        stateSelect.addEventListener('change', function() {
+            const selectedState = this.value;
+            localGovSelect.innerHTML = '';  // Clear local governments dropdown
+
+            if (selectedState in data) {
+                // Populate local governments dropdown
+                data[selectedState].forEach(lga => {
+                    let option = document.createElement('option');
+                    option.value = lga;
+                    option.textContent = lga;
+                    localGovSelect.appendChild(option);
+                });
+            }
+        });
+    })
+    .catch(error => console.error('Error fetching state data:', error));
+
+// AJAX form submission
+document.getElementById('enlistForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent default form submission
+
+    const hospitalData = {
+        name: document.getElementById('hospital-name').value,
+        state: document.getElementById('hospital-state').value,
+        local_government: document.getElementById('hospital-local-government').value,
+        address: document.getElementById('hospital-address').value
+    };
+
+    fetch('/hospitals', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(hospitalData)
+    })
+    .then(response => response.json())
+    .then(data => alert(data.message))
+    .catch(error => console.error('Error:', error));
+});
+
+var myCarousel = document.querySelector('#specialtiesCarousel');
+var carousel = new bootstrap.Carousel(myCarousel, {
+    interval: 2000, // Slide every 2 seconds
+    ride: 'carousel'
+});
+
+</script>
+<!-- Make sure this is included in your HTML, at the end of the body -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
