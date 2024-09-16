@@ -1,11 +1,100 @@
+/* Modal Styling */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-bottom: 1px solid #ddd;
+    background-color: #f8f9fa;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 1rem;
+    position: relative;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #333;
+    opacity: 0.5;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* Chatbox Styling */
+#chatbox {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+}
+
+#messages {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow-y: auto;
+    background-color: #fff;
+    max-height: 200px;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: none;
+    margin-top: 0.5rem;
+    box-sizing: border-box;
+}
+
+button#send-chat {
+    background-color: #7CFC00;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+button#send-chat:hover {
+    background-color: #66c700;
+}
+
+/* Modal Body Styling */
+.modal-body {
+    padding: 1rem;
+    background-color: #fff;
+}
+
+
+.chatbot-modal .modal-dialog {
+    max-width: 800px;
+}
+.chatbot-frame {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
 /* Modals initially hidden */
 .modal {
     display: none;
-}
-
-/* Dropdown menu initially hidden */
-.dropdown-menu {
-    display: none;
+    z-index: 1050;
 }
 
 /* Enlist form initially hidden */
@@ -13,15 +102,12 @@
     display: none;
 }
 
-/* Other existing CSS styles */
-
-
-
 /* Navbar Styles */
 .navbar {
     background-color: white; /* Set navbar background color to white */
     border-radius: 50px; /* Cylindrical look */
     padding: 0.75rem 2rem;
+    z-index: 10;
 }
 
 .nav-link {
@@ -114,9 +200,13 @@
 }
 
 .carousel-inner > .carousel-item {
-    display: flex; /* Ensure all items are displayed correctly */
+    display: none; /* Ensure all items are displayed correctly */
     align-items: center;
     justify-content: center;
+}
+
+.carousel-item {
+    display: block;
 }
 
 #specialties .carousel-item {
@@ -153,6 +243,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    z-index: 1;
 }
 
 .hero-section h1, .hero-section p {
@@ -177,7 +268,6 @@
     height: 2rem;
     width: 2rem;
 }
-
 
 .developer-info img {
     width: 50px;
@@ -239,7 +329,6 @@
     font-size: 0.875rem;
 }
 
-
 .specialties-marquee {
     overflow: hidden;
     white-space: nowrap;
@@ -274,4 +363,3 @@
         transform: translateX(-100%);
     }
 }
-

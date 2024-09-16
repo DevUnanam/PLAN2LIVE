@@ -21,12 +21,15 @@ from datetime import timedelta
 from datetime import datetime, timezone
 from api.states_api import api
 from state_lga_data import get_all_states
+from dotenv import load_dotenv
 
 
 
 import os
+import openai
 import secrets
 from PIL import Image
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Use a strong secret key
@@ -476,6 +479,36 @@ def save_hospital_profile():
 
     flash('Hospital profile saved successfully!', 'success')
     return redirect(url_for('hospital_dashboard'))
+
+# Load OpenAI API key from environment variable
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+@app.route('/chat', methods=['POST'])
+def chatbot():
+    try:
+        # Get user message from the request
+        data = request.get_json()
+        user_input = data.get('message')
+
+        if not user_input:
+            return jsonify({'error': 'No input message provided.'}), 400
+
+        # Send user message to OpenAI's GPT model
+        response = openai.Completion.create(
+            model="gpt-3.5-turbo",  # Choose model, or gpt-3.5-turbo for cost-effective responses
+            prompt=user_input,
+            max_tokens=150,  # Adjust response length
+            temperature=0.7,  # Adjust the creativity of the responses
+        )
+
+        # Extract chatbot's response
+        bot_reply = response.choices[0].text.strip()
+
+        # Return chatbot's response as JSON
+        return jsonify({'reply': bot_reply}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 

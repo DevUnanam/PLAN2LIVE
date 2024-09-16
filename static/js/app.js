@@ -1,107 +1,224 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Sign In and Sign Up Modals
     const signinModal = document.getElementById('signin-modal');
     const signupModal = document.getElementById('signup-modal');
     const signinButton = document.getElementById('signin-button');
     const signupButton = document.getElementById('signup-button');
+    const closeSignin = document.getElementById('close-signin'); // Add close buttons to modals
+    const closeSignup = document.getElementById('close-signup');
 
-    signinButton.addEventListener('click', function() {
-        signinModal.style.display = 'block';
-        signupModal.style.display = 'none';
-    });
+    if (signinButton && signupButton && signinModal && signupModal) {
+        // Open sign-in modal and hide sign-up modal
+        signinButton.addEventListener('click', function() {
+            const signinModalInstance = new bootstrap.Modal(signinModal);
+            signinModalInstance.show();
+            const signupModalInstance = bootstrap.Modal.getInstance(signupModal);
+            if (signupModalInstance) {
+                signupModalInstance.hide();
+            }
+        });
 
-    signupButton.addEventListener('click', function() {
-        signupModal.style.display = 'block';
-        signinModal.style.display = 'none';
-    });
+        // Open sign-up modal and hide sign-in modal
+        signupButton.addEventListener('click', function() {
+            const signupModalInstance = new bootstrap.Modal(signupModal);
+            signupModalInstance.show();
+            const signinModalInstance = bootstrap.Modal.getInstance(signinModal);
+            if (signinModalInstance) {
+                signinModalInstance.hide();
+            }
+        });
 
-    window.addEventListener('click', function(event) {
-        if (event.target === signinModal || event.target === signupModal) {
-            signinModal.style.display = 'none';
-            signupModal.style.display = 'none';
-        }
-    });
+        // Close sign-in modal on close button click
+        closeSignin.addEventListener('click', function() {
+            const signinModalInstance = bootstrap.Modal.getInstance(signinModal);
+            if (signinModalInstance) {
+                signinModalInstance.hide();
+            }
+        });
 
+        // Close sign-up modal on close button click
+        closeSignup.addEventListener('click', function() {
+            const signupModalInstance = bootstrap.Modal.getInstance(signupModal);
+            if (signupModalInstance) {
+                signupModalInstance.hide();
+            }
+        });
+
+        // Close the modal if the user clicks outside of the modal content (not the modal itself)
+        window.addEventListener('click', function(event) {
+            if (event.target === signinModal) {
+                const signinModalInstance = bootstrap.Modal.getInstance(signinModal);
+                if (signinModalInstance) {
+                    signinModalInstance.hide();
+                }
+            }
+            if (event.target === signupModal) {
+                const signupModalInstance = bootstrap.Modal.getInstance(signupModal);
+                if (signupModalInstance) {
+                    signupModalInstance.hide();
+                }
+            }
+        });
+    }
+
+    // State and LGA Selectors
     const stateSelect = document.getElementById('state-select');
     const lgaSelect = document.getElementById('lga-select');
 
-    fetch('/api/states')
-        .then(response => response.json())
-        .then(states => {
-            states.forEach(state => {
-                const option = document.createElement('option');
-                option.value = state;
-                option.textContent = state;
-                stateSelect.appendChild(option);
+    if (stateSelect && lgaSelect) {
+        fetch('/api/states')
+            .then(response => response.json())
+            .then(states => {
+                states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
             });
+
+        stateSelect.addEventListener('change', function () {
+            const selectedState = stateSelect.value;
+            lgaSelect.innerHTML = '';
+
+            fetch(`/api/lgas/${selectedState}`)
+                .then(response => response.json())
+                .then(lgas => {
+                    if (lgas.error) {
+                        alert(lgas.error);
+                    } else {
+                        lgas.forEach(lga => {
+                            const option = document.createElement('option');
+                            option.value = lga;
+                            option.textContent = lga;
+                            lgaSelect.appendChild(option);
+                        });
+                    }
+                });
         });
+    }
 
-    stateSelect.addEventListener('change', function () {
-        const selectedState = stateSelect.value;
-        lgaSelect.innerHTML = '';
+    // Filters Form
+    const filtersForm = document.getElementById('filters-form');
+    if (filtersForm) {
+        filtersForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const gender = document.getElementById('gender-filter').value;
+            const ageGroup = document.getElementById('age-filter').value;
 
-        fetch(`/api/lgas/${selectedState}`)
-            .then(response => response.json())
-            .then(lgas => {
-                if (lgas.error) {
-                    alert(lgas.error);
-                } else {
-                    lgas.forEach(lga => {
-                        const option = document.createElement('option');
-                        option.value = lga;
-                        option.textContent = lga;
-                        lgaSelect.appendChild(option);
-                    });
-                }
+            console.log('Selected Gender:', gender);
+            console.log('Selected Age Group:', ageGroup);
+        });
+    }
+
+    // Hospital State Selector
+    const hospitalStateSelect = document.getElementById('hospital-state');
+    const hospitalLgaSelect = document.getElementById('hospital-local-government');
+
+    if (hospitalStateSelect && hospitalLgaSelect) {
+        hospitalStateSelect.addEventListener('change', function() {
+            const stateName = this.value;
+
+            fetch(`/api/lgas/${stateName}`)
+                .then(response => response.json())
+                .then(data => {
+                    hospitalLgaSelect.innerHTML = '';
+
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        data.forEach(lga => {
+                            const option = document.createElement('option');
+                            option.value = lga;
+                            option.textContent = lga;
+                            hospitalLgaSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching LGAs:', error);
+                    alert('Unable to fetch LGAs. Please try again later.');
+                });
+        });
+    }
+
+    // Enlist Dropdown Menu
+    const enlistButton = document.querySelector('.nav-item.dropdown .nav-link.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.nav-item.dropdown .dropdown-menu');
+
+    if (enlistButton && dropdownMenu) {
+        enlistButton.addEventListener('click', function() {
+            const isVisible = dropdownMenu.classList.contains('show');
+            dropdownMenu.classList.toggle('show', !isVisible);
+        });
+    }
+
+    // Handle Public and Private Hospital Selection
+    const publicHospitalButton = document.querySelector('.dropdown-menu .dropdown-item[data-hospital-type="public"]');
+    const privateHospitalButton = document.querySelector('.dropdown-menu .dropdown-item[data-hospital-type="private"]');
+
+    if (publicHospitalButton) {
+        publicHospitalButton.addEventListener('click', function() {
+            // Open the modal for hospital enlistment
+            const enlistHospitalModal = new bootstrap.Modal(document.getElementById('enlistHospitalModal'));
+            enlistHospitalModal.show();
+            // Set hidden input to indicate public hospital
+            document.getElementById('hospital-type').value = 'public';
+        });
+    }
+
+    if (privateHospitalButton) {
+        privateHospitalButton.addEventListener('click', function() {
+            // Open the modal for hospital enlistment
+            const enlistHospitalModal = new bootstrap.Modal(document.getElementById('enlistHospitalModal'));
+            enlistHospitalModal.show();
+            // Set hidden input to indicate private hospital
+            document.getElementById('hospital-type').value = 'private';
+        });
+    }
+
+    // ChatGPT Integration
+    const chatboxContainer = document.createElement('div');
+    chatboxContainer.id = 'chatbox-container';
+    chatboxContainer.innerHTML = `
+        <div id="chatbox">
+            <div id="chat-messages"></div>
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="send-chat">Send</button>
+        </div>
+    `;
+    document.body.appendChild(chatboxContainer);
+
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendChatButton = document.getElementById('send-chat');
+
+    sendChatButton.addEventListener('click', async function() {
+        const userMessage = chatInput.value;
+        if (userMessage.trim() === '') return;
+
+        // Display user message
+        chatMessages.innerHTML += `<div>User: ${userMessage}</div>`;
+        chatInput.value = '';
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userMessage })
             });
-    });
 
-    document.getElementById('filters-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const gender = document.getElementById('gender-filter').value;
-        const ageGroup = document.getElementById('age-filter').value;
+            const data = await response.json();
+            const botReply = data.reply;
 
-        console.log('Selected Gender:', gender);
-        console.log('Selected Age Group:', ageGroup);
-    });
-
-    document.getElementById('hospital-state').addEventListener('change', function() {
-        const stateName = this.value;
-
-        fetch(`/api/lgas/${stateName}`)
-            .then(response => response.json())
-            .then(data => {
-                const lgaSelect = document.getElementById('hospital-local-government');
-                lgaSelect.innerHTML = '';
-
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    data.forEach(lga => {
-                        const option = document.createElement('option');
-                        option.value = lga;
-                        option.textContent = lga;
-                        lgaSelect.appendChild(option);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching LGAs:', error);
-                alert('Unable to fetch LGAs. Please try again later.');
-            });
-    });
-
-    document.getElementById('enlist-button').addEventListener('click', function() {
-        const dropdownMenu = document.getElementById('dropdown-menu');
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-
-    document.getElementById('public-hospital').addEventListener('click', function() {
-        document.getElementById('dropdown-menu').style.display = 'none';
-        document.getElementById('enlist-form').style.display = 'block';
-    });
-
-    document.getElementById('private-hospital').addEventListener('click', function() {
-        document.getElementById('dropdown-menu').style.display = 'none';
-        document.getElementById('enlist-form').style.display = 'block';
+            // Display ChatGPT's response
+            chatMessages.innerHTML += `<div>ChatGPT: ${botReply}</div>`;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        } catch (error) {
+            console.error('Error:', error);
+            chatMessages.innerHTML += `<div>Error: Could not send message. Please try again later.</div>`;
+        }
     });
 });
