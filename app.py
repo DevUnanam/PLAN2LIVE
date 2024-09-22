@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""app.py the main entery file for the app"""
+
+
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
