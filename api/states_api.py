@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""states.py an API for states and LGA"""
+
+
 from flask import Blueprint, jsonify
 from state_lga_data import get_all_states, get_lgas_by_state
 
