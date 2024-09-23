@@ -108,6 +108,7 @@ button#send-chat:hover {
     border-radius: 50px; /* Cylindrical look */
     padding: 0.75rem 2rem;
     z-index: 10;
+    color: #000;
 }
 
 .nav-link {
@@ -283,7 +284,7 @@ button#send-chat:hover {
 
 /* Footer Styles */
 .footer {
-    background-color: #f8f9fa;
+    background-color: #376605;
     padding: 20px 0;
 }
 
@@ -333,12 +334,14 @@ button#send-chat:hover {
     overflow: hidden;
     white-space: nowrap;
     position: relative;
+    gap: 30px;
 }
 
 .specialties-inner {
     display: flex;
-    animation: marquee 15s linear infinite;
-}
+    /* animation: marquee 15s linear infinite; */
+} 
+
 
 /* Ensure full-width footer */
 .container {
@@ -354,6 +357,154 @@ button#send-chat:hover {
 .list-unstyled a:hover {
     text-decoration: underline;
 }
+/* Footer General Styles */
+.footer {
+    padding: 40px 20px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-column {
+    width: 24%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Footer Logo and Social Media */
+.footer-logo .logo {
+    max-width: 80px;
+    margin-bottom: 10px;
+}
+
+.social-media {
+    display: flex;
+    justify-content: center;  /* Centers the icons horizontally */
+    gap: 15px;  /* Adds space between the icons */
+    margin-top: 10px;
+}
+
+.social-media a:hover {
+    color: #0056b3;  /* Hover color */
+}
+
+.social-media a {
+    font-size: 24px;
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.social-media a:hover {
+    color: #0056b3;
+}
+
+.social-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.location {
+    font-size: 14px;
+    color: white;
+    margin-top: 5px;
+}
+
+.tagline {
+    font-size: 14px;
+    margin-top: 10px;
+    color: white;
+}
+
+/* Helpful Links */
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Developer Info */
+.developer-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.developer-info {
+    margin-bottom: 20px;
+}
+
+.social-links a {
+    margin: 0 5px;
+}
+
+.social-links img {
+    width: 25px;
+    height: 25px;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #dee2e6;
+    color: white;
+}
+.image-background {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer-column {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .social-icon, .social-links img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .developer-photo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .footer-logo .logo {
+        max-width: 60px;
+    }
+}
+
 
 @keyframes marquee {
     0% {

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specialties - Plan2Live</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/specialties.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <div class="mx-auto">
+                <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Plan2Live Logo"></a>
+            </div>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('book_doc') }}">Book a Doctor</a>
+                <a class="nav-link" href="{{ url_for('oops') }}">Find Hospitals</a>
+
+            </div>
+            <div class="ml-auto">
+                <a href="/landing" class="btn btn-outline-success">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner Section -->
+    <header class="banner d-flex align-items-center">
+        <div class="banner-content">
+            <h1>Make an appointment with doctors online now</h1>
+            <h3>All doctors are available to be booked at your earliest convenience</h3>
+            <div class="doctor-images">
+                <img src="{{ url_for('static', filename='images/doctor1.png') }}" class="rounded-circle" alt="Doctor 1">
+                <img src="{{ url_for('static', filename='images/doctor2.png') }}" class="rounded-circle" alt="Doctor 2">
+            </div>
+            <p>
+                Verified Doctors <i class="fab fa-verified"></i> from Verified Hospitals
+            </p>
+        </div>
+        <div class="banner-image">
+            <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Banner Image">
+        </div>
+    </header>
+
+    <section id="specialties" class="container-fluid my-5">
+        <h2 class="text-center mb-4">SPECIALTIES</h2>
+        <div class="text-center mb-4">
+            <p>Select from a wide range of top doctors from top hospitals for any health concern.</p>
+
+        </div>
+    
+        <!-- Marquee Container -->
+        <div class="specialties-marquee">
+            <div class="specialties-inner">
+                <!-- Card 1 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/cardiology_icon.png') }}" class="card-img-top" alt="Cardiology">
+                    <div class="card-body">
+                        <h5 class="card-title">Cardiology</h5>
+                        <a href="/consult/cardiology" class="btn btn-link">BOOK NOW</a> <!-- Adjust the href link accordingly -->
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/dermatology_icon.png') }}" class="card-img-top" alt="Dermatology">
+                    <div class="card-body">
+                        <h5 class="card-title">Dermatology</h5>
+                        <a href="/consult/dermatology" class="btn btn-link">BOOK NOW</a> <!-- Adjust the href link accordingly -->
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/gastroenterology.png') }}" class="card-img-top" alt="Gastroenterology">
+                    <div class="card-body">
+                        <h5 class="card-title">Gastroenterology</h5>
+                        <a href="/consult/gastroenterology" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+    
+                <!-- Card 4 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/neurology.png') }}" class="card-img-top" alt="Neurology">
+                    <div class="card-body">
+                        <h5 class="card-title">Neurology</h5>
+                        <a href="/consult/neurology" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+    
+                <!-- Card 5 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/oncology.png') }}" class="card-img-top" alt="Oncology">
+                    <div class="card-body">
+                        <h5 class="card-title">Oncology</h5>
+                        <a href="/consult/oncology" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+    
+                <!-- Card 6 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/optometrist.png') }}" class="card-img-top" alt="Optometry">
+                    <div class="card-body">
+                        <h5 class="card-title">Optometry</h5>
+                        <a href="/consult/optometry" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+    
+                <!-- Card 7 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/orthopedics_icon.png') }}" class="card-img-top" alt="Orthopedics">
+                    <div class="card-body">
+                        <h5 class="card-title">Orthopedics</h5>
+                        <a href="/consult/orthopedics" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+    
+                <!-- Card 8 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/pediatrics_icon.png') }}" class="card-img-top" alt="Pediatrics">
+                    <div class="card-body">
+                        <h5 class="card-title">Pediatrics</h5>
+                        <a href="/consult/pediatrics" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+    
+                <!-- Card 9 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/pulmonology.png') }}" class="card-img-top" alt="Pulmonology">
+                    <div class="card-body">
+                        <h5 class="card-title">Pulmonology</h5>
+                        <a href="/consult/pulmonology" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+    
+                <!-- Card 10 -->
+                <div class="card text-center">
+                    <img src="{{ url_for('static', filename='images/thyroid.png') }}" class="card-img-top" alt="Thyroid">
+                    <div class="card-body">
+                        <h5 class="card-title">Thyroid</h5>
+                        <a href="/consult/thyroid" class="btn btn-link">BOOK NOW</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        
+
+
+    <section id="how-it-works" class="container py-5">
+        <div class="text-center">
+            <h2 class="mb-4">How It Works</h2>
+            <div class="row">
+                <!-- Card 1 -->
+                <div class="col-md-4">
+                    <div class="card bg-dark text-white mb-4" style="background-image: url('{{ url_for('static', filename='images/search_background.jpg') }}'); background-size: cover; background-position: center; height: 300px;">
+                        <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+                            <i class="fas fa-search fa-3x mb-3"></i>
+                            <h4>Search for a Specialist</h4>
+                            <p>Use our powerful search tool to find the best doctors or specialists based on your needs.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="col-md-4">
+                    <div class="card bg-dark text-white mb-4" style="background-image: url('{{ url_for('static', filename='images/booking_background.jpg') }}'); background-size: cover; background-position: center; height: 300px;">
+                        <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+                            <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                            <h4>Book an Appointment</h4>
+                            <p>Choose a suitable time slot and book your appointment easily through our platform.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="col-md-4">
+                    <div class="card bg-dark text-white mb-4" style="background-image: url('{{ url_for('static', filename='images/visit_background.jpg') }}'); background-size: cover; background-position: center; height: 300px;">
+                        <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+                            <i class="fas fa-hospital fa-3x mb-3"></i>
+                            <h4>Visit the Hospital</h4>
+                            <p>Attend your scheduled appointment and receive top-quality care from our listed hospitals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- OUR DOCTORS Section -->
+   <section id="our-doctors" class="container my-5">
+    <h2 class="text-center mb-4">OUR DOCTORS</h2>
+    <div class="glide">
+        <div class="glide__track" data-glide-el="track">
+            <div class="glide__slides">
+                <!-- Doctor Card Example -->
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card1.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Cardiology</p>
+                            <p class="card-text">10 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for more doctors -->
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card2.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. Jane Smith</h4>
+                            <p class="card-text">Dermatology</p>
+                            <p class="card-text">8 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card3.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Gynaecologist</p>
+                            <p class="card-text">12 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card4.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Opthamologist</p>
+                            <p class="card-text">12 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card5.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Pediatrics</p>
+                            <p class="card-text">5 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card6.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Dentist</p>
+                            <p class="card-text">18 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more cards here -->
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card1.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Cardiology</p>
+                            <p class="card-text">10 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for more doctors -->
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card2.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. Jane Smith</h4>
+                            <p class="card-text">Dermatology</p>
+                            <p class="card-text">8 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card3.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Gynaecologist</p>
+                            <p class="card-text">12 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card4.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Opthamologist</p>
+                            <p class="card-text">12 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card5.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Pediatrics</p>
+                            <p class="card-text">5 years experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glide__slide">
+                    <div class="cardz text-center">
+                        <img src="{{ url_for('static', filename='images/doctor_card6.png') }}" class="rounded-circle" alt="Doctor Name">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. John Doe</h4>
+                            <p class="card-text">Dentist</p>
+                            <p class="card-text">18 years experience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="glide__arrows" data-glide-el="controls">
+            <button id="prevButton" class="glide__arrow glide__arrow--left" data-glide-dir="<">
+                <span class="fas fa-chevron-left"></span>
+            </button>
+            <button id="nextButton" class="glide__arrow glide__arrow--right" data-glide-dir=">">
+                <span class="fas fa-chevron-right"></span>
+            </button>
+        </div>
+        
+    </div>
+</section>
+
+
+
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Column 1: Footer Logo and Social Media -->
+            <div class="footer-column">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Plan2Live Logo" class="logo">
+                    <p>Plan2Live</p>
+                    <p class="location">LAGOS, IKEJA, NIGERIA</p>
+                </div>
+                <div class="social-media">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+                <p class="tagline">"Connecting you to better healthcare."</p>
+            </div>
+    
+            <!-- Column 2: Helpful Links -->
+            <div class="footer-column">
+                <h5 class="footer-title">Helpful Links</h5>
+                <ul class="footer-links">
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Community Guidelines</a></li>
+                </ul>
+            </div>
+    
+            <!-- Column 3: Developed By (Unanam Victoria Joseph) -->
+            <div class="footer-column">
+                <h5 class="footer-title">Developed By</h5>
+                <div class="developer-info">
+                    <img src="{{ url_for('static', filename='images/unanam-photo.jpeg') }}" alt="Unanam Victoria Joseph" class="developer-photo">
+                    <p>Unanam Victoria Joseph</p>
+                    <p class="location">Fullstack developer</p>
+                    <div class="social-media">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                        
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Column 4: Developed By (Jamiu Shomoye) -->
+            <div class="footer-column">
+                <h5 class="footer-title">Developed By</h5>
+                <div class="developer-info">
+                    <img src="{{ url_for('static', filename='images/jamiu-photo.jpg') }}" alt="Jamiu Shomoye" class="developer-photo">
+                    <p>Jamiu Shomoye</p>
+                    <p class="location">Fullstack developer</p>
+                    <div class="social-media">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2024 Plan2Live. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            new Glide('.glide').mount();
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+    
+</body>
+</html>

@@ -62,10 +62,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // State and LGA Selectors
-    const stateSelect = document.getElementById('state-select');
-    const lgaSelect = document.getElementById('lga-select');
+    const stateSelect = document.getElementById('hospital-state');
+    const lgaSelect = document.getElementById('hospital-local-government');
 
-    if (stateSelect && lgaSelect) {
+    enlist_hospital = document.getElementById('enlist_hospital')
+
+    enlist_hospital.addEventListener('click', function (){
         fetch('/api/states')
             .then(response => response.json())
             .then(states => {
@@ -77,26 +79,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
-        stateSelect.addEventListener('change', function () {
-            const selectedState = stateSelect.value;
-            lgaSelect.innerHTML = '';
+        
+    })
 
-            fetch(`/api/lgas/${selectedState}`)
-                .then(response => response.json())
-                .then(lgas => {
-                    if (lgas.error) {
-                        alert(lgas.error);
-                    } else {
-                        lgas.forEach(lga => {
-                            const option = document.createElement('option');
-                            option.value = lga;
-                            option.textContent = lga;
-                            lgaSelect.appendChild(option);
-                        });
-                    }
-                });
-        });
-    }
+    stateSelect.addEventListener('change', function () {
+        const selectedState = stateSelect.value;
+        console.log(selectedState)
+        lgaSelect.innerHTML = '';
+
+        fetch(`/api/lgas/${selectedState}`)
+            .then(response => response.json())
+            .then(lgas => {
+                console.log(lgas)
+                if (lgas.error) {
+                    alert(lgas.error);
+                } else {
+                    lgas.forEach(lga => {
+                        const option = document.createElement('option');
+                        option.value = lga.name;
+                        option.textContent = lga.name;
+                        lgaSelect.appendChild(option);
+                    });
+                }
+            });
+    });
+        
+    
 
     // Filters Form
     const filtersForm = document.getElementById('filters-form');
@@ -111,36 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Hospital State Selector
-    const hospitalStateSelect = document.getElementById('hospital-state');
-    const hospitalLgaSelect = document.getElementById('hospital-local-government');
-
-    if (hospitalStateSelect && hospitalLgaSelect) {
-        hospitalStateSelect.addEventListener('change', function() {
-            const stateName = this.value;
-
-            fetch(`/api/lgas/${stateName}`)
-                .then(response => response.json())
-                .then(data => {
-                    hospitalLgaSelect.innerHTML = '';
-
-                    if (data.error) {
-                        alert(data.error);
-                    } else {
-                        data.forEach(lga => {
-                            const option = document.createElement('option');
-                            option.value = lga;
-                            option.textContent = lga;
-                            hospitalLgaSelect.appendChild(option);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching LGAs:', error);
-                    alert('Unable to fetch LGAs. Please try again later.');
-                });
-        });
-    }
 
     // Enlist Dropdown Menu
     const enlistButton = document.querySelector('.nav-item.dropdown .nav-link.dropdown-toggle');
@@ -177,17 +155,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ChatGPT Integration
-    const chatboxContainer = document.createElement('div');
-    chatboxContainer.id = 'chatbox-container';
-    chatboxContainer.innerHTML = `
-        <div id="chatbox">
-            <div id="chat-messages"></div>
-            <input type="text" id="chat-input" placeholder="Type your message...">
-            <button id="send-chat">Send</button>
-        </div>
-    `;
-    document.body.appendChild(chatboxContainer);
+    // // ChatGPT Integration
+    // const chatboxContainer = document.createElement('div');
+    // chatboxContainer.id = 'chatbox-container';
+    // chatboxContainer.innerHTML = `
+    //     <div id="chatbox">
+    //         <div id="chat-messages"></div>
+    //         <input type="text" id="chat-input" placeholder="Type your message...">
+    //         <button id="send-chat">Send</button>
+    //     </div>
+    // `;
+    // document.body.appendChild(chatboxContainer);
 
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');

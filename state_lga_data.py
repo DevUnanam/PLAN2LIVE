@@ -13,6 +13,7 @@ def get_all_states():
     except Exception as err:
         print(f"Error: {err}")
 
+
 # Function to get LGAs for a specific state using its state code
 def get_lgas_by_state(state_code):
     try:
@@ -30,7 +31,7 @@ if __name__ == "__main__":
     if states:
         for state in states:
             print(f"State: {state['name']}")
-            lgas = get_lgas_by_state(state['code'])
+            lgas = get_lgas_by_state(state['state_code'])
             if lgas:
                 print(f"LGAs in {state['name']}: {lgas}")
 

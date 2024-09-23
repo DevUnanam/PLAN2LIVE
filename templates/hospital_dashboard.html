@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hospital_dashboard.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ hospital.name }} - Dashboard</title>
+</head>
+<body>
+    <h1>{{ hospital.name }} Dashboard</h1>
+    <p><strong>Email:</strong> {{ hospital.email }}</p>
+    <p><strong>Address:</strong> {{ hospital.address }}, {{ hospital.lga }}, {{ hospital.state }}</p>
+
+    <h2>Bookings</h2>
+    <ul>
+        {% for booking in bookings %}
+        <li>{{ booking.patient_name }} - {{ booking.date }} - {{ booking.status }}</li>
+        {% else %}
+        <li>No bookings available.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Reviews</h2>
+    <ul>
+        {% for review in reviews %}
+        <li>{{ review.name }}: {{ review.content }} - Rating: {{ review.rating }}</li>
+        {% else %}
+        <li>No reviews yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

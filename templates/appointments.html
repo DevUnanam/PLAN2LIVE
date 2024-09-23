@@ -1,0 +1,19 @@
+<h2>Your Appointments</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Doctor Name</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+        <tr>
+            <td>{{ appointment.doctor_name }}</td>
+            <td>{{ appointment.date }}</td>
+            <td><a href="#" class="btn btn-danger">Cancel</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

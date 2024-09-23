@@ -11,6 +11,7 @@ from flask_mail import Mail, Message
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+import os
 import pyotp
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
@@ -23,25 +24,22 @@ from api.states_api import api
 from state_lga_data import get_all_states
 from dotenv import load_dotenv
 
-
-
-import os
 import openai
 import secrets
 from PIL import Image
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'  # Use a strong secret key
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:M3d3asin3@localhost/plan2live"
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') 
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'Riaahh20@gmail.com'
-app.config['MAIL_PASSWORD'] = 'qzcd lzhc oizb tvbt'
+app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
+app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
@@ -55,7 +53,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 mail = Mail(app)
 login_manager = LoginManager(app)
-s = URLSafeTimedSerializer(app.config['SECRET_KEY'])  # Serializer for generating secure tokens
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 CORS(app)  # Enable CORS for the Flask app
 limiter = Limiter(get_remote_address, app=app, default_limits=["200 per day", "50 per hour"])
 
@@ -77,7 +75,7 @@ class User(db.Model):
     reset_token = db.Column(db.String(60), nullable=True)
     otp_secret = db.Column(db.String(16), nullable=True)
     bookings = db.relationship('Booking', backref='user', lazy=True)
-
+    reviews = db.relationship('Review', backref='user', lazy=True)
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -85,13 +83,24 @@ class Review(db.Model):
     content = db.Column(db.Text, nullable=False)
     profile_picture_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    hospital_id = db.Column(db.Integer, db.ForeignKey('hospital.id'), nullable=False)
+    hospital = db.relationship('Hospital', backref='reviews')
 # Hospital Model
 class Hospital(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    state = db.Column(db.String(60), nullable=False)
-    local_government = db.Column(db.String(60), nullable=False)
-    address = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    is_verified = db.Column(db.Boolean, default=False)  # For email verification
+    address = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    logo = db.Column(db.String(200), nullable=True)  # For the hospital logo
+    specialties = db.Column(db.String(200), nullable=True)
+    state = db.Column(db.String(100), nullable=True)  # Add state field
+    lga = db.Column(db.String(100), nullable=True)  
+    # Additional fields based on your requirements
+    
+    def __repr__(self):
+        return f"<Hospital {self.name}>"
 
 # Forms
 class SignUpForm(FlaskForm):
@@ -180,16 +189,13 @@ def signin():
     if request.method == 'POST' and form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            if not user.is_verified:
-                return 'Please verify your email before logging in.', 401
-            if user.otp_secret:  # Check if 2FA is enabled
-                session['user_email'] = user.email
-                return redirect(url_for('verify_2fa'))
             session['user'] = user.email
             return redirect(url_for('dashboard'))
         return 'Invalid credentials', 401
-    return redirect(url_for('landing'))
+    return render_template('signin.html', form=form)
 
+
+@app.route('/signup', methods=['GET', 'POST'])
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()
@@ -206,8 +212,10 @@ def signup():
         msg.body = f'Please click the link to verify your email: {token_url}'
         mail.send(msg)
 
-        return redirect(url_for('signin'))
-    return redirect(url_for('landing'))
+        return redirect(url_for('dashboard'))
+    return render_template('signup.html', form=form)
+
+
 
 @app.route('/verify/<token>')
 def verify_email(token):
@@ -261,10 +269,128 @@ def send_reset_email(to_email, reset_url):
     msg.body = f'To reset your password, visit the following link: {reset_url}'
     mail.send(msg)
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('signin'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return f'Welcome {current_user.email}'
+    user_email = session.get('user')
+    user = User.query.filter_by(email=user_email).first()
+
+    if user is None:
+        return 'User not found', 404
+
+    # Fetch user bookings
+    bookings = Booking.query.filter_by(user_id=user.id).all()  # Adjust based on your actual model
+
+    # Fetch user reviews
+    user_reviews = Review.query.filter_by(user_id=user.id).all()  # Adjust based on your actual model
+
+    return render_template('user_dashboard.html', user=user, bookings=bookings, user_reviews=user_reviews)
+
+def create_upload_folder():
+    upload_folder = app.config['UPLOAD_FOLDER']
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder)
+
+create_upload_folder()
+
+
+@app.route('/dashboard/appointments')
+def appointments():
+    # Get appointments from the database for the logged-in user
+    appointments = get_appointments(session['user_id'])
+    return render_template('appointments.html', appointments=appointments)
+
+@app.route('/dashboard/profile/update', methods=['POST'])
+def update_profile():
+    user = User.query.get(session['user_id'])
+    user.name = request.form['name']
+    db.session.commit()
+    return redirect(url_for('profile'))
+
+@app.route('/hospital-dashboard/<int:hospital_id>')
+def hospital_dashboard(hospital_id):
+    hospital = Hospital.query.get_or_404(hospital_id)
+
+    # Check if the user has a hospital_id
+    if current_user.is_authenticated and current_user.hospital_id != hospital_id:
+        flash('You do not have permission to access this dashboard.', 'danger')
+        return redirect(url_for('index'))
+
+    # Gather necessary data (e.g., hospital bookings, reviews, specialties)
+    bookings = Booking.query.filter_by(hospital_id=hospital_id).all()
+    reviews = Review.query.filter_by(hospital_id=hospital_id).all()
+
+    return render_template('hospital_dashboard.html', hospital=hospital, bookings=bookings, reviews=reviews)
+
+
+@app.route('/edit_hospital_profile', methods=['GET', 'POST'])
+def edit_hospital_profile():
+    if request.method == 'POST':
+        # Handle profile update logic
+        pass
+    hospital = get_hospital_info()  # Fetch hospital info
+    return render_template('edit_hospital_profile.html', hospital=hospital)
+
+
+@app.route('/user_dashboard')
+@login_required
+def user_dashboard():
+    # Fetch user data, bookings, and reviews
+    user = get_user_info()  # Implement this function
+    bookings = get_bookings()  # Implement this function
+    user_reviews = get_user_reviews()  # Implement this function
+    return render_template('user_dashboard.html', user=user, bookings=bookings, user_reviews=user_reviews)
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_user_profile():
+    user = current_user  # Use the logged-in user
+
+    if request.method == 'POST':
+        # Update user details
+        user.name = request.form.get('name')
+        user.email = request.form.get('email')
+        user.phone_number = request.form.get('phone')
+
+        # Handle profile picture upload
+        if 'profile_picture' in request.files:
+            file = request.files['profile_picture']
+            if file and file.filename != '':
+                filename = secure_filename(file.filename)
+
+                # Create the full path to save the file in 'static/uploads'
+                upload_folder = os.path.join(app.root_path, 'static/uploads')
+                if not os.path.exists(upload_folder):
+                    os.makedirs(upload_folder)
+                
+                file_path = os.path.join(upload_folder, filename)
+                
+                # Save the file
+                file.save(file_path)
+
+                # Update the profile picture path with a URL pointing to 'static/uploads'
+                user.profile_picture = url_for('static', filename='uploads/' + filename)
+
+        # Commit changes to the database
+        db.session.commit()
+        # Update session
+        session['user'] = user.email  # Ensure the session reflects the updated user
+        
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template('edit_profile.html', user=user)
+
+
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -273,23 +399,9 @@ def allowed_file(filename):
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    form = ProfileUpdateForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        if form.profile_picture.data:
-            file = form.profile_picture.data
-            if allowed_file(file.filename):
-                filename = save_picture(file)  # Use the function to save the picture
-                current_user.profile_picture = filename
-                # Optionally, you might want to commit changes to the database here
-                db.session.commit()
-                flash('Your profile picture has been updated!', 'success')
-            else:
-                flash('File type is not allowed. Please upload a valid image.', 'danger')
-        else:
-            flash('No file selected. Please choose an image to upload.', 'warning')
-    
-    # Render the profile update form
-    return render_template('profile.html', form=form)
+    # Get user profile data from database
+    user_data = get_user_profile(session['user_id'])
+    return render_template('profile.html', user=user_data)
     
 
 
@@ -340,7 +452,21 @@ def logout():
     logout_user()
     session.pop('user', None)
     flash('You have been logged out.', 'info')
-    return redirect(url_for('signin'))
+    return redirect(url_for('landing'))
+
+@app.route('/specialties')
+def specialties():
+    return render_template('specialties.html')
+
+@app.route('/book-doc')
+def book_doc():
+    return render_template('book_doc.html')
+
+
+@app.route('/oops')
+def oops():
+    return render_template('oops.html')
+
 
 @app.route('/testdb')
 def testdb():
@@ -431,18 +557,29 @@ def enlist_hospital():
     hospital_lga = request.form.get('hospital_lga')
     hospital_address = request.form.get('hospital_address')
 
-    # Generate email verification token
-    token = serializer.dumps(hospital_email, salt='email-confirm')
+    # Simple email validation
+    if '@' not in hospital_email or '.' not in hospital_email:
+        flash('Invalid email address.', 'danger')
+        return redirect(url_for('index'))  # Return to landing page or re-open modal
 
-    # Send verification email
-    verification_url = url_for('confirm_email', token=token, _external=True)
-    html = f'<p>Thanks for registering your hospital. Please verify your email by clicking the link below:</p><a href="{verification_url}">Verify your email</a>'
+    # Save the hospital data to the database
+    new_hospital = Hospital(
+        name=hospital_name,
+        email=hospital_email,
+        state=hospital_state,  # Ensure these fields match the updated model
+        lga=hospital_lga,
+        address=hospital_address
+    )
+    
+    db.session.add(new_hospital)
+    db.session.commit()
 
-    msg = Message('Confirm Your Email', recipients=[hospital_email], html=html)
-    mail.send(msg)
+    flash('Hospital enlisted successfully!', 'success')
+    
+    # Redirect to the hospital dashboard
+    return redirect(url_for('hospital_dashboard', hospital_id=new_hospital.id))
 
-    flash('An email has been sent to verify your email address.', 'success')
-    return redirect(url_for('enlist_page'))
+
 
 # Route to handle email verification
 @app.route('/confirm/<token>')

@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
         <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         
     </head>
@@ -22,7 +23,7 @@
                             ENLIST
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#enlistHospitalModal" data-hospital-type="public">PUBLIC HOSPITAL</a></li>
+                            <li><a id="enlist_hospital" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#enlistHospitalModal" data-hospital-type="public">PUBLIC HOSPITAL</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#enlistHospitalModal" data-hospital-type="private">PRIVATE HOSPITAL</a></li>
                         </ul>
@@ -41,37 +42,35 @@
         </nav>
     
 <!-- Hero Section -->
-        <section class="hero-section" style="position: relative; height: 100vh;">
-            <!-- Video Background -->
-            <video autoplay muted loop id="heroVideo" class="video-background">
-                <source src="{{ url_for('static', filename='videos/hero-video.mp4') }}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+<section class="hero-section" style="position: relative; height: 100vh;">
+    <!-- Image Background -->
+    <img id="heroImage" class="image-background" src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="Hero Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
 
-            <!-- Overlay -->
-            <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+    <!-- Overlay -->
+    <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
 
-            <!-- Hero Content -->
-            <div class="container text-center" style="position: relative; z-index: 2; color: #7CFC00;">
-                <h1 class="display-4">Find and Book Doctors Easily</h1>
-                <p class="lead">Search for specialties, hospitals, or healthcare providers near you</p>
+    <!-- Hero Content -->
+    <div class="container text-center" style="position: relative; z-index: 2; color: #7CFC00;">
+        <h1 class="display-4">Find and Book Doctors Easily</h1>
+        <p class="lead">Search for specialties, hospitals, or healthcare providers near you</p>
 
-                <!-- Search Bar -->
-                <div class="search-bar mt-4 mb-4">
-                    <form action="{{ url_for('search') }}" method="GET" class="d-flex justify-content-center">
-                        <input type="text" name="query" class="form-control" placeholder="Search by specialty, hospital, or location" style="width: 50%;">
-                        <button type="submit" class="btn btn-primary ms-2" style="background-color: white; font-weight: bold; color: #376b04;">Search</button>
-                    </form>
-                </div>
+        <!-- Search Bar -->
+        <div class="search-bar mt-4 mb-4">
+            <form action="{{ url_for('search') }}" method="GET" class="d-flex justify-content-center">
+                <input type="text" name="query" class="form-control" placeholder="Search by specialty, hospital, or location" style="width: 50%;">
+                <button type="submit" class="btn btn-primary ms-2" style="background-color: white; font-weight: bold; color: #376b04;">Search</button>
+            </form>
+        </div>
 
-                <!-- Call to Actions -->
-                <div class="cta-buttons mt-4">
-                    <a href="#" class="btn btn-outline-light me-2">Book a Doctor</a>
-                    <a href="#" class="btn btn-outline-light me-2">Enlist Your Hospital</a>
-                    <a href="#" class="btn btn-outline-light">Find Specialties</a>
-                </div>
-            </div>
-        </section>
+        <!-- Call to Actions -->
+        <div class="cta-buttons mt-4">
+            <a href="{{ url_for('book_doc') }}" class="btn btn-outline-light me-2">Book a Doctor</a>
+            <a href="{{ url_for('oops') }}" class="btn btn-outline-light me-2">Enlist Your Hospital</a>
+            <a href="/specialties" class="btn btn-outline-light">Find Specialties</a>
+        </div>
+    </div>
+</section>
+
 
     
     
@@ -202,46 +201,48 @@
         </div>
 
 
-            <!-- Enlist Hospital Modal -->
-        <div class="modal fade" id="enlistHospitalModal" tabindex="-1" aria-labelledby="enlistHospitalModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="enlistHospitalModalLabel">Enlist Your Hospital</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           <!-- Enlist Hospital Modal -->
+<div class="modal fade" id="enlistHospitalModal" tabindex="-1" aria-labelledby="enlistHospitalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="enlistHospitalModalLabel">Enlist Your Hospital</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="enlistForm" method="POST" action="{{ url_for('enlist_hospital') }}">
+                    <div class="mb-3">
+                        <label for="hospital-name" class="form-label">Hospital Name</label>
+                        <input type="text" class="form-control" id="hospital-name" name="hospital_name" required>
                     </div>
-                    <div class="modal-body">
-                        <form id="enlistForm" method="POST" action="/enlist">
-                            <div class="mb-3">
-                                <label for="hospital-name" class="form-label">Hospital Name</label>
-                                <input type="text" class="form-control" id="hospital-name" name="hospital_name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="hospital-email" class="form-label">Hospital Email</label>
-                                <input type="email" class="form-control" id="hospital-email" name="hospital_email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="hospital-state" class="form-label">State</label>
-                                <select id="hospital-state" class="form-select" name="hospital_state" required>
-                                    <!-- State options will be dynamically loaded -->
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="hospital-local-government" class="form-label">Local Government</label>
-                                <select id="hospital-local-government" class="form-select" name="hospital_lga" required>
-                                    <!-- LGAs will be dynamically loaded based on selected state -->
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="hospital-address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="hospital-address" name="hospital_address" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">ENLIST NOW</button>
-                        </form>
+                    <div class="mb-3">
+                        <label for="hospital-email" class="form-label">Hospital Email</label>
+                        <input type="email" class="form-control" id="hospital-email" name="hospital_email" required>
                     </div>
-                </div>
+                    <div class="mb-3">
+                        <label for="hospital-state" class="form-label">State</label>
+                        <select id="hospital-state" class="form-select" name="hospital_state" required>
+                            <!-- State options will be dynamically loaded -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hospital-local-government" class="form-label">Local Government</label>
+                        <select id="hospital-local-government" class="form-select" name="hospital_lga" required>
+                            <!-- LGAs will be dynamically loaded based on selected state -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hospital-address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="hospital-address" name="hospital_address" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">ENLIST NOW</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+
+
 
         <!-- Modal HTML -->
         <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
@@ -264,7 +265,13 @@
 
 
         <section id="specialties" class="container-fluid my-5">
-            <h2 class="text-center mb-4">Our Specialties</h2>
+            <h2 class="text-center mb-4">SPECIALTIES</h2>
+            <div class="text-center mb-4">
+                <p>Select from a wide range of top doctors from top hospitals for any health concern.</p>
+                <a href="/specialties" class="btn btn-primary">VIEW ALL SPECIALTIES</a>
+
+            </div>
+        
             <!-- Marquee Container -->
             <div class="specialties-marquee">
                 <div class="specialties-inner">
@@ -273,7 +280,7 @@
                         <img src="{{ url_for('static', filename='images/cardiology_icon.png') }}" class="card-img-top" alt="Cardiology">
                         <div class="card-body">
                             <h5 class="card-title">Cardiology</h5>
-                            <a href="/specialties/cardiology" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a> <!-- Adjust the href link accordingly -->
                         </div>
                     </div>
                     <!-- Card 2 -->
@@ -281,79 +288,85 @@
                         <img src="{{ url_for('static', filename='images/dermatology_icon.png') }}" class="card-img-top" alt="Dermatology">
                         <div class="card-body">
                             <h5 class="card-title">Dermatology</h5>
-                            <a href="/specialties/dermatology" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a> <!-- Adjust the href link accordingly -->
                         </div>
                     </div>
-
+                    
+                    <!-- Card 3 -->
                     <div class="card text-center">
                         <img src="{{ url_for('static', filename='images/gastroenterology.png') }}" class="card-img-top" alt="Gastroenterology">
                         <div class="card-body">
                             <h5 class="card-title">Gastroenterology</h5>
-                            <a href="/specialties/gastroenterology" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-
+        
+                    <!-- Card 4 -->
                     <div class="card text-center">
                         <img src="{{ url_for('static', filename='images/neurology.png') }}" class="card-img-top" alt="Neurology">
                         <div class="card-body">
                             <h5 class="card-title">Neurology</h5>
-                            <a href="/specialties/neurology" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-
+        
+                    <!-- Card 5 -->
                     <div class="card text-center">
-                        <img src="{{ url_for('static', filename='images/oncology.png') }}" class="card-img-top" alt="oncology">
+                        <img src="{{ url_for('static', filename='images/oncology.png') }}" class="card-img-top" alt="Oncology">
                         <div class="card-body">
                             <h5 class="card-title">Oncology</h5>
-                            <a href="/specialties/oncology" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-
+        
+                    <!-- Card 6 -->
                     <div class="card text-center">
-                        <img src="{{ url_for('static', filename='images/optometrist.png') }}" class="card-img-top" alt="optometrist">
+                        <img src="{{ url_for('static', filename='images/optometrist.png') }}" class="card-img-top" alt="Optometry">
                         <div class="card-body">
                             <h5 class="card-title">Optometry</h5>
-                            <a href="/specialties/optometrist" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-
+        
+                    <!-- Card 7 -->
                     <div class="card text-center">
-                        <img src="{{ url_for('static', filename='images/orthopedics_icon.png') }}" class="card-img-top" alt="orthopedics">
+                        <img src="{{ url_for('static', filename='images/orthopedics_icon.png') }}" class="card-img-top" alt="Orthopedics">
                         <div class="card-body">
                             <h5 class="card-title">Orthopedics</h5>
-                            <a href="/specialties/orthopedics" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-
+        
+                    <!-- Card 8 -->
                     <div class="card text-center">
-                        <img src="{{ url_for('static', filename='images/pediatrics_icon.png') }}" class="card-img-top" alt="pediatrics">
+                        <img src="{{ url_for('static', filename='images/pediatrics_icon.png') }}" class="card-img-top" alt="Pediatrics">
                         <div class="card-body">
                             <h5 class="card-title">Pediatrics</h5>
-                            <a href="/specialties/pediatrics" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-
+        
+                    <!-- Card 9 -->
                     <div class="card text-center">
-                        <img src="{{ url_for('static', filename='images/pulmonology.png') }}" class="card-img-top" alt="pulmonology">
+                        <img src="{{ url_for('static', filename='images/pulmonology.png') }}" class="card-img-top" alt="Pulmonology">
                         <div class="card-body">
                             <h5 class="card-title">Pulmonology</h5>
-                            <a href="/specialties/pulmonology" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-
+        
+                    <!-- Card 10 -->
                     <div class="card text-center">
-                        <img src="{{ url_for('static', filename='images/thyroid.png') }}" class="card-img-top" alt="thyroid">
+                        <img src="{{ url_for('static', filename='images/thyroid.png') }}" class="card-img-top" alt="Thyroid">
                         <div class="card-body">
                             <h5 class="card-title">Thyroid</h5>
-                            <a href="/specialties/thyroid" class="btn btn-primary">Learn More</a>
+                            <a href="/book-doc" class="btn btn-link">BOOK NOW</a>
                         </div>
                     </div>
-                    <!-- Add more cards as needed -->
                 </div>
             </div>
         </section>
-
-        
+            
 
 
         <section id="how-it-works" class="container py-5">
@@ -443,86 +456,75 @@
             </div>
         </section>
 
-        <footer class="container-fluid bg-light py-4">
-            <div class="container">
-                <div class="row">
-                    <!-- Card 1: Footer Logo and Social Media -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="footer-logo text-center mb-3">
-                                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Plan2Live Logo"> <!-- FASFA logo -->
-                                    <p>Plan2Live</p>
-                                </div>
-                                <div class="social-media text-center mb-3">
-                                    <a href="#"><img src="{{ url_for('static', filename='images/facebook_logo.png') }}" alt="Facebook"></a>
-                                    <a href="#"><img src="{{ url_for('static', filename='images/instagram-logo.png') }}" alt="Instagram"></a>
-                                    <a href="#"><img src="{{ url_for('static', filename='images/x-logo.png') }}" alt="X"></a>
-                                    <a href="#"><img src="{{ url_for('static', filename='images/youtube-logo.png') }}" alt="YouTube"></a>
-                                </div>
-                                <p class="text-center">LAGOS, IKEJA, NIGERIA</p>
-                                <p class="text-center">"Connecting you to better healthcare."</p>
-                            </div>
-                        </div>
+        <footer class="footer">
+            <div class="footer-container">
+                <!-- Column 1: Footer Logo and Social Media -->
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Plan2Live Logo" class="logo">
+                        <p style="color: white;">Plan2Live</p>
+                        <p class="location">LAGOS, IKEJA, NIGERIA</p>
                     </div>
-
-                    <!-- Card 2: Helpful Links -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">Helpful Links</h5>
-                                <ul class="list-unstyled">
-                                    <li><a href="#">Blog</a></li>
-                                    <li><a href="#">Contact Us</a></li>
-                                    <li><a href="#">FAQ</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Community Guidelines</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="social-media">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
-
-                    <!-- Card 3: Developed By -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">DEVELOPED BY</h5>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="developer-info">
-                                        <img src="{{ url_for('static', filename='images/unanam-photo.jpeg') }}" alt="Unanam Victoria Joseph">
-                                        <div>
-                                            <p>Unanam Victoria Joseph</p>
-                                            <div class="social-links">
-                                                <a href="#"><img src="{{ url_for('static', filename='images/github-logo.png') }}" alt="GitHub"></a>
-                                                <a href="#"><img src="{{ url_for('static', filename='images/linkedin-logo.png') }}" alt="LinkedIn"></a>
-                                                <a href="#"><img src="{{ url_for('static', filename='images/x-logo.png') }}" alt="X"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="developer-info">
-                                        <img src="{{ url_for('static', filename='images/jamiu-photo.jpg') }}" alt="Jamiu Shomoye">
-                                        <div>
-                                            <p>Jamiu Shomoye</p>
-                                            <div class="social-links">
-                                                <a href="#"><img src="{{ url_for('static', filename='images/github-logo.png') }}" alt="GitHub"></a>
-                                                <a href="#"><img src="{{ url_for('static', filename='images/linkedin-logo.png') }}" alt="LinkedIn"></a>
-                                                <a href="#"><img src="{{ url_for('static', filename='images/x-logo.png') }}" alt="X"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <p class="tagline">"Connecting you to better healthcare."</p>
+                </div>
+        
+                <!-- Column 2: Helpful Links -->
+                <div class="footer-column">
+                    <h5 class="footer-title">Helpful Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Community Guidelines</a></li>
+                    </ul>
+                </div>
+        
+                <!-- Column 3: Developed By (Unanam Victoria Joseph) -->
+                <div class="footer-column">
+                    <h5 class="footer-title">Developed By</h5>
+                    <div class="developer-info">
+                        <img src="{{ url_for('static', filename='images/unanam-photo.jpeg') }}" alt="Unanam Victoria Joseph" class="developer-photo">
+                        <p style="color: white;">Unanam Victoria Joseph</p>
+                        <p class="location">Fullstack developer</p>
+                        <div class="social-media">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-x-twitter"></i></a>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="footer-bottom text-center mt-4">
-                    <p>&copy; 2024 Plan2Live. All rights reserved.</p>
+        
+                <!-- Column 4: Developed By (Jamiu Shomoye) -->
+                <div class="footer-column">
+                    <h5 class="footer-title">Developed By</h5>
+                    <div class="developer-info">
+                        <img src="{{ url_for('static', filename='images/jamiu-photo.jpg') }}" alt="Jamiu Shomoye" class="developer-photo">
+                        <p style="color: white;">Jamiu Shomoye</p>
+                        <p class="location">Fullstack developer</p>
+                        <div class="social-media">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-x-twitter"></i></a>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
+        
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2024 Plan2Live. All rights reserved.</p>
+            </div>
         </footer>
-
+        
 
         <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 

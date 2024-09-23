@@ -1,0 +1,206 @@
+/* Navbar Styles */
+.navbar {
+    padding: 1rem;
+    background-color: #f8f9fa; /* Light background */
+}
+
+.navbar-brand img {
+    height: 50px; /* Adjust logo size */
+}
+
+.nav-link {
+    margin-right: 1.5rem; /* Spacing between links */
+    font-weight: bold; /* Bold text for links */
+}
+
+.btn-outline-success {
+    margin-left: auto; /* Push the button to the right */
+}
+
+/* Banner Styles */
+.banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem;
+    background-color: #e9ecef; /* Light grey background */
+    position: relative;
+}
+
+.banner-content {
+    flex: 1;
+    max-width: 500px; /* Limit the width */
+}
+
+.banner h1 {
+    font-size: 2.5rem; /* Larger font for main title */
+    margin-bottom: 1rem;
+}
+
+.banner h3 {
+    font-size: 1.5rem; /* Slightly smaller for subtitle */
+    margin-bottom: 1rem;
+}
+
+.doctor-images {
+    display: flex;
+    gap: 1rem; /* Spacing between images */
+    margin-bottom: 1rem;
+}
+
+.doctor-images img {
+    width: 60px; /* Small size for doctor images */
+    height: 60px;
+    border: 2px solid #007bff; /* Border color */
+}
+
+/* Verified Text Styles */
+.banner p {
+    font-size: 1rem; /* Normal text size */
+    display: flex;
+    align-items: center; /* Center the icon with text */
+}
+
+.banner p i {
+    margin-left: 0.5rem; /* Spacing for icon */
+}
+
+/* Banner Image Styles */
+.banner-image img {
+    max-width: 300px; /* Adjust the max width to reduce size */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Our Doctors Section */
+#our-doctors {
+    margin-top: 3rem;
+}
+
+#our-doctors h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.glide__track {
+    display: flex;
+    overflow: hidden; /* Ensure content overflows horizontally */
+}
+.glide__slides {
+    display: flex; /* Arrange slides in a row */
+    gap: 1rem; /* Optional: Space between slides */
+    width: 100%; /* Ensure the slides take up full width */
+    transition: transform 0.3s ease-in-out; /* Smooth slide transition */
+}
+
+
+.glide__slide {
+    flex-shrink: 0; /* Prevent shrinking */
+    width: auto; /* Ensure the card takes its content's width */
+    display: flex;
+    justify-content: center; /* Center each card horizontally */
+    align-items: center; /* Align content vertically */
+    padding: 1rem; /* Optional: Padding around each slide */
+}
+
+.card {
+    border: none; /* No border */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.3s; /* Animation for hover effect */
+}
+
+.card:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.card img {
+    width: 80px; /* Adjust size for doctor images */
+    height: 80px;
+    margin-bottom: 1rem; /* Space between image and text */
+}
+
+/* OUR DOCTORS Section */
+#our-doctors {
+    margin-top: 3rem;
+}
+
+/* Styling for the Cards in the Slider */
+.cardz {
+    width: 250px; /* Width of each card */
+    margin: 0 auto; /* Center the card */
+    background-color: #ffffff; /* Card background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    padding: 1rem;
+    transition: transform 0.3s ease-in-out; /* Smooth hover effect */
+}
+
+.cardz:hover {
+    transform: scale(1.05); /* Enlarge card slightly on hover */
+}
+
+.cardz img {
+    width: 80px; /* Doctor image width */
+    height: 80px; /* Doctor image height */
+    margin-bottom: 1rem; /* Space between image and text */
+    border: 2px solid #007bff; /* Add border around the image */
+}
+
+.cardz .card-body {
+    padding: 0.5rem; /* Padding inside the card body */
+}
+
+.cardz h4 {
+    font-size: 1.2rem; /* Doctor name font size */
+    margin-bottom: 0.5rem; /* Space below the doctor name */
+    color: #333333; /* Text color for the doctor name */
+}
+
+.cardz p {
+    font-size: 0.9rem; /* Font size for other text */
+    color: #666666; /* Text color for the specialties and experience */
+}
+
+/* Glide Slider Settings */
+.glide__slide {
+    display: flex;
+    justify-content: center; /* Center each slide horizontally */
+    align-items: center;
+}
+
+.glide__arrows button {
+    background-color: transparent; /* Transparent background for arrow buttons */
+    border: none; /* Remove border from buttons */
+    font-size: 2rem; /* Font size for the arrows */
+    color: #007bff; /* Arrow color */
+    transition: color 0.2s ease-in-out; /* Smooth color transition */
+}
+
+.glide__arrows button:hover {
+    color: #0056b3; /* Darker color on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cardz {
+        width: 200px; /* Adjust card width for smaller screens */
+    }
+
+    .glide__arrows {
+        display: none; /* Hide arrows on small screens */
+    }
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .banner {
+        flex-direction: column; /* Stack content on smaller screens */
+        align-items: center;
+    }
+
+    .banner-image img {
+        width: 100%; /* Full width for banner image */
+        height: auto; /* Maintain aspect ratio */
+    }
+}

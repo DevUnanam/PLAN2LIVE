@@ -19,7 +19,7 @@ def get_lgas(state_name):
     if states_data:
         state = next((s for s in states_data if s['name'].lower() == state_name.lower()), None)
         if state:
-            lgas = get_lgas_by_state(state['code'])
+            lgas = get_lgas_by_state(state['state_code'])
             return jsonify(lgas)
         return jsonify({"error": "State not found"}), 404
     return jsonify({"error": "Unable to fetch LGAs"}), 500
