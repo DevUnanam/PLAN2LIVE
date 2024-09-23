@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""state_lga_data.py to get states and LGA from the API"""
+
 import requests
 
 BASE_URL = "https://nigeria-states-towns-lgas.onrender.com/api"
